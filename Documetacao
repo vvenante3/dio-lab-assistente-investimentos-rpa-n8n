@@ -1,0 +1,29 @@
+Este projeto foi desenvolvido como parte do desafio da DIO. O objetivo é automatizar a coleta de dados de clientes e gerar mensagens com sugestões de investimentos de acordo com o perfil e o saldo de cada um.
+
+Tecnologias utilizadas:
+- Python: para acessar a página e extrair os dados dos clientes.
+- Google Colab: para executar o código Python.
+- BeautifulSoup: para ler e extrair as informações da tabela de clientes.
+- n8n: para automatizar o fluxo de processamento dos dados.
+- Webhook: para receber os dados enviados pelo Python.
+- HTTP Request: para buscar o arquivo CSV com as opções de investimento.
+- GitHub Pages: para disponibilizar a página de clientes e o arquivo CSV.
+
+O projeto funciona em algumas etapas:
+1. O código Python acessa a página de clientes disponível no GitHub Pages.
+2. Com o BeautifulSoup, o script extrai o nome, e-mail, saldo e perfil de cada cliente.
+3. Os dados são enviados para o Webhook do n8n.
+4. O nó Transf. Dados separa os clientes para facilitar o processamento.
+5. O nó HTTP Request busca o arquivo CSV com as opções de investimento.
+6. O nó Recomendar Investimentos compara o perfil e o saldo de cada cliente com os investimentos disponíveis no CSV.
+7. O nó Switch separa os clientes de acordo com seus perfis: Conservador, Moderado e Arrojado.
+8. Cada perfil segue para um nó com uma mensagem de recomendação correspondente.
+
+As mensagens são definidas por modelos estáticos, com textos diferentes para cada perfil:
+- Conservador: foco em segurança e renda fixa.
+- Moderado: busca de equilíbrio entre renda fixa e alternativas com maior risco.
+- Arrojado: foco em alternativas com maior exposição à renda variável e seus riscos.
+
+
+
+Desenvolvido por Vitor Venante como parte do desafio da DIO.
