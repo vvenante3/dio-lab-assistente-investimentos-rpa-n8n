@@ -1,0 +1,338 @@
+{
+  "name": "Projeto-DIO",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Clientes",
+        "options": {
+          "responseCode": {
+            "values": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -592,
+        16
+      ],
+      "id": "ab48054f-0b2c-45af-aca4-7d3b8f6b2231",
+      "name": "Webhook",
+      "webhookId": "f10719e7-3c20-495f-81c6-8665bdb09977"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "04688703-8902-447d-ab99-0322e29660f8",
+                    "leftValue": "={{ $json.perfil }}",
+                    "rightValue": "Conservador",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "46e386bf-0aa8-4c83-9d27-664403a165f2",
+                    "leftValue": "={{ $json.perfil }}",
+                    "rightValue": "Moderado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b71092f0-0b92-4e1b-bda3-2f31098f280e",
+                    "leftValue": "={{ $json.perfil }}",
+                    "rightValue": "Arrojado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        512,
+        0
+      ],
+      "id": "4a2abdee-7bcb-4f64-a495-d34897103664",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4fca7698-1578-4540-be78-52582319de0a",
+              "name": "Mensagem",
+              "value": "={{ \"Olá, \" + $json.nome + \"! Para seu perfil conservador, priorizamos opções de renda fixa com foco em segurança e previsibilidade, respeitando o saldo disponível.\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "={{ true }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        800,
+        -176
+      ],
+      "id": "1eace360-9758-43aa-b2cc-360c67914c94",
+      "name": "Conservador"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9634f147-2285-4549-83a2-fa3fd01b299a",
+              "name": "mensagem",
+              "value": "={{ \"Olá, \" + $json.nome + \"! Para seu perfil moderado, podemos avaliar uma combinação equilibrada de alternativas de renda fixa e opções com maior exposição a riscos.\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        800,
+        16
+      ],
+      "id": "1b0f0588-bedc-401d-9fd4-74e18b1f5abc",
+      "name": "Moderado"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e450506f-2303-4f7c-a5e7-b557bcf3dd26",
+              "name": "mensagem",
+              "value": "={{ \"Olá, \" + $json.nome + \"! Para seu perfil arrojado, podemos avaliar alternativas com maior exposição à renda variável, considerando os riscos e o horizonte de investimento.\" }}",
+              "type": "string"
+            },
+            {
+              "id": "016ccce7-1bdc-46ea-95f7-6d1153a1c853",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        800,
+        208
+      ],
+      "id": "c9f2256d-d198-44cc-b678-c3c8603792ab",
+      "name": "Arrojado"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst entrada = $input.first().json;\nconst clientes = entrada.body.clientes;\n\nreturn clientes.map(cliente => ({\n  json: {\n    nome: cliente.nome,\n    email: cliente.email,\n    saldo: cliente.saldo,\n    perfil: cliente.perfil\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        16
+      ],
+      "id": "3ee8029b-b6aa-4b37-8a98-3def0ac618de",
+      "name": "Transf. Dados"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst investimentos = [\n  { perfil: \"Conservador\", produto: \"Poupança\", minimo: 100, rentabilidade: \"6.2%\" },\n  { perfil: \"Conservador\", produto: \"CDB Liquidez Diária\", minimo: 1000, rentabilidade: \"12.5%\" },\n  { perfil: \"Conservador\", produto: \"Tesouro Selic\", minimo: 500, rentabilidade: \"13.0%\" },\n  { perfil: \"Moderado\", produto: \"CDB Prefixado\", minimo: 1000, rentabilidade: \"14.0%\" },\n  { perfil: \"Moderado\", produto: \"Fundo Multimercado\", minimo: 5000, rentabilidade: \"16.0%\" },\n  { perfil: \"Moderado\", produto: \"Tesouro IPCA+\", minimo: 1000, rentabilidade: \"IPCA+6.0%\" },\n  { perfil: \"Arrojado\", produto: \"Ações ETF\", minimo: 500, rentabilidade: \"Variável\" },\n  { perfil: \"Arrojado\", produto: \"Fundo de Ações\", minimo: 10000, rentabilidade: \"Variável\" },\n  { perfil: \"Arrojado\", produto: \"Criptomoedas\", minimo: 100, rentabilidade: \"Variável\" }\n];\n\nfunction converterSaldo(valor) {\n  return Number(\n    String(valor ?? \"\")\n      .replace(\"R$\", \"\")\n      .replace(/\\./g, \"\")\n      .replace(\",\", \".\")\n      .trim()\n  );\n}\n\nreturn $input.all().map(item => {\n  const cliente = item.json;\n  const saldo = converterSaldo(cliente.saldo);\n\n  const opcoes = investimentos.filter(produto =>\n    produto.perfil === cliente.perfil &&\n    saldo >= produto.minimo\n  );\n\n  const mensagem = opcoes.length\n    ? `Olá, ${cliente.nome}! Encontramos ${opcoes.length} opção(ões) compatíveis com seu perfil e saldo: ${opcoes.map(p => p.produto).join(\", \")}.`\n    : `Olá, ${cliente.nome}! Não encontramos opções do catálogo com investimento mínimo compatível com seu saldo atual.`;\n\n  return {\n    json: {\n      ...cliente,\n      opcoesInvestimento: opcoes,\n      mensagem\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        16
+      ],
+      "id": "9554b5d4-55d9-4daa-b43c-c11571b58da5",
+      "name": "Nó Investimentos"
+    },
+    {
+      "parameters": {
+        "url": "https://digitalinnovationone.github.io/dio-lab-assistente-investimentos-rpa-n8n/data.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        80,
+        16
+      ],
+      "id": "d501c445-01e9-4bdc-8ac5-f0ad1b1f003d",
+      "name": "HTTP Request",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst csv = $('HTTP Request').first().json.data;\n\nconst linhas = csv.trim().split(/\\r?\\n/);\nconst cabecalho = linhas[0].split(\",\");\n\nconst investimentos = linhas.slice(1).map(linha => {\n  const valores = linha.split(\",\");\n\n  return {\n    perfil: valores[0],\n    produto: valores[1],\n    minimo: Number(valores[2]),\n    rentabilidade: valores[3]\n  };\n});\n\n// Recupera os 10 clientes do nó anterior\nconst clientes = $('Transf. Dados').all();\n\nfunction converterSaldo(valor) {\n  return Number(\n    String(valor ?? \"\")\n      .replace(\"R$\", \"\")\n      .replace(/\\./g, \"\")\n      .replace(\",\", \".\")\n      .trim()\n  );\n}\n\nreturn clientes.map(item => {\n  const cliente = item.json;\n  const saldo = converterSaldo(cliente.saldo);\n\n  const opcoes = investimentos.filter(produto =>\n    produto.perfil === cliente.perfil &&\n    saldo >= produto.minimo\n  );\n\n  return {\n    json: {\n      ...cliente,\n      opcoesInvestimento: opcoes,\n      mensagem: opcoes.length\n        ? `Olá, ${cliente.nome}! Encontramos ${opcoes.length} opção(ões) compatíveis: ${opcoes.map(p => p.produto).join(\", \")}.`\n        : `Olá, ${cliente.nome}! Não encontramos opções do catálogo com investimento mínimo compatível com seu saldo atual.`\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        16
+      ],
+      "id": "8d3bddd5-b4fa-4692-a62f-918537a685eb",
+      "name": "Recomendar Investimentos"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Transf. Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Conservador",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Moderado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Arrojado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transf. Dados": {
+      "main": [
+        [
+          {
+            "node": "Nó Investimentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nó Investimentos": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Recomendar Investimentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recomendar Investimentos": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "11ec5ccd-e49f-4bbb-adbf-16243e46e27e",
+  "meta": {
+    "instanceId": "985ae6ee8e5d7d3040a62470e8a60a238244e581c6980657175e051e070b8e26"
+  },
+  "nodeGroups": [],
+  "id": "d4T6HRxJNCQykHkv",
+  "tags": []
+}
